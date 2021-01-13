@@ -2,15 +2,15 @@ from enum import Enum
 
 
 class MdObjectType(Enum):
-	DATASET = "dataset"
-	VIEW = "view"
 	DASHBOARD = "dashboard"
-	INDICATOR_DRILL = "indicatorDrill"
+	DATA_PERMISSION = "dataPermission"
+	DATASET = "dataset"
+	EXPORT = "export"
 	INDICATOR = "indicator"
-	METRIC = "metric"
+	INDICATOR_DRILL = "indicatorDrill"
 	MARKER = "marker"
 	MARKER_SELECTOR = "markerSelector"
-	EXPORT = "export"
-	DATA_PERMISSION = "dataPermission"
+	METRIC = "metric"
 	PROJECT_SETTINGS = "projectSettings"
 	SHARE = "share"
+	VIEW = "view"
