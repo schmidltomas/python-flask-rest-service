@@ -11,6 +11,8 @@ Exercise project - backend service with REST API in Python &amp; Flask.
 7. pip install flask-sqlalchemy
 8. pip install flask-migrate
 9. pip install psycopg2
+9. pip install flask-restful
+9. pip install exrex
 
 # DB migration
 1. psql -U postgres -c "CREATE DATABASE apgqi1djut1d5f9u_md;"
