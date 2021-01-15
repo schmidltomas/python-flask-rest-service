@@ -7,6 +7,11 @@ class BaseModel:
 		db.session.commit()
 		return self
 
+	def delete(self):
+		db.session.delete(self)
+		db.session.commit()
+		return self
+
 	@staticmethod
 	def rollback():
 		db.session.rollback()

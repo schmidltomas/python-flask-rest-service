@@ -16,7 +16,7 @@ class DatasetDwhType(db.Model, BaseModel):
 	primary_key = db.Column(db.String)
 	properties = db.Column(JSON)
 
-	dataset_id = db.Column(db.String(16), db.ForeignKey('dataset.id'))
+	dataset_id = db.Column(db.String(16), db.ForeignKey('dataset.id', ondelete='CASCADE'))
 	dataset = db.relationship('Dataset', back_populates='ref')
 
 	def __init__(self, type, subtype, table, primary_key, properties, dataset_id):

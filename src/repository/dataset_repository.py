@@ -2,10 +2,12 @@ from sqlalchemy.exc import IntegrityError
 from src.exceptions import ResourceExists
 from src.model import Dataset, DatasetDwhType
 from src.schema import DatasetSchema
+from flask import request
 
 
 class DatasetRepository:
 
+	# TODO also use request object?
 	@staticmethod
 	def create(name: str, title: str, ref: dict) -> dict:
 		try:
@@ -25,9 +27,24 @@ class DatasetRepository:
 
 		return result
 
-	# TODO reuse method?
 	@staticmethod
 	def get(name: str) -> dict:
 		dataset = Dataset.query.filter_by(name=name).first_or_404()
 		dataset = DatasetSchema().dump(dataset)
 		return dataset
+
+	@staticmethod
+	def get_all() -> dict:
+		datasets = Dataset.query.all()
+		datasets = DatasetSchema().dump(datasets, many=True)
+		return datasets
+
+	@staticmethod
+	def put(name: str) -> dict:
+		# TODO
+		return {}
+
+	@staticmethod
+	def delete(name: str):
+		dataset = Dataset.query.filter_by(name=name).first_or_404()
+		dataset.delete()

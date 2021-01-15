@@ -12,7 +12,7 @@ class Dataset(db.Model, BaseModel):
 	type = db.Column(db.String)
 	title = db.Column(db.String)
 
-	ref = db.relationship('DatasetDwhType', back_populates='dataset', uselist=False)
+	ref = db.relationship('DatasetDwhType', back_populates='dataset', uselist=False, passive_deletes=True)
 
 	def __init__(self, name, type, title):
 		self.id = utils.generate_id()
