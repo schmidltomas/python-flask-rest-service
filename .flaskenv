@@ -1,3 +1,7 @@
 FLASK_APP=src/main.py
-APP_PROPERTIES="config.DevelopmentConfig"
-DATABASE_URL="postgresql://postgres:@localhost/apgqi1djut1d5f9u_md"
+FLASK_ENV=development
+
+POSTGRES_URL=localhost:5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=
+POSTGRES_DB=apgqi1djut1d5f9u_md

@@ -12,4 +12,3 @@ migrate = Migrate(app, db)
 api = Api(app)
 api.add_resource(DatasetList, '/datasets')
 api.add_resource(Dataset, '/datasets/<name>')
-
