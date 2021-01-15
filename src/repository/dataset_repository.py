@@ -1,11 +1,11 @@
 from sqlalchemy.exc import IntegrityError
 from src.exceptions import ResourceExists
-from src.models import Dataset, DatasetDwhType
+from src.model import Dataset, DatasetDwhType
+from src.schema import DatasetSchema
 
 
 class DatasetRepository:
 
-	# TODO result as kind of DTO object, instead of dict?
 	@staticmethod
 	def create(name: str, title: str, ref: dict) -> dict:
 		try:
@@ -17,30 +17,17 @@ class DatasetRepository:
 				ref.get('properties'), dataset.id)
 			dataset_dwh_type.save()
 
-			print(dataset)
-			print(dataset_dwh_type)
-
-			result = {
-				'id': dataset.id,
-				'name': dataset.name,
-				'type': 'dataset',
-				'title': dataset.title,
-				# 'ref': dataset.ref
-			}
+			saved_dataset = Dataset.query.filter_by(name=dataset.name).first_or_404()
+			result = DatasetSchema().dump(saved_dataset)
 		except IntegrityError:
 			Dataset.rollback()
 			raise ResourceExists('Dataset name=' + name + ' already exists.')
 
 		return result
 
+	# TODO reuse method?
 	@staticmethod
 	def get(name: str) -> dict:
 		dataset = Dataset.query.filter_by(name=name).first_or_404()
-		dataset = {
-			'id': dataset.id,
-			'name': dataset.name,
-			'type': 'dataset',
-			'title': dataset.title,
-			# 'ref': dataset.ref
-		}
+		dataset = DatasetSchema().dump(dataset)
 		return dataset

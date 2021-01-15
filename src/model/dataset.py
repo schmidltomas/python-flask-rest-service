@@ -1,22 +1,24 @@
-from marshmallow import post_load
+from . import db
+from .base_model import BaseModel
+from src import utils
 
-from .md_object import MdObject, MdObjectSchema
-from .md_object_type import MdObjectType
 
+class Dataset(db.Model, BaseModel):
+	__tablename__ = 'dataset'
 
-class Dataset(MdObject):
-	def __init__(self, name, title, content):
-		super(Dataset, self).__init__(name, MdObjectType.DATASET, title, content)
-		# TODO type MdObjectType.DATASET
-		# TypeError: __init__() got an unexpected keyword argument 'type'
-		# TODO optional fields
-		# marshmallow.exceptions.ValidationError: {'description': ['Unknown field.']}
+	id = db.Column(db.String(16), primary_key=True)
+	name = db.Column(db.String, unique=True)
+	# TODO should be db.Integer & enum
+	type = db.Column(db.String)
+	title = db.Column(db.String)
+
+	ref = db.relationship('DatasetDwhType', back_populates='dataset', uselist=False)
+
+	def __init__(self, name, type, title):
+		self.id = utils.generate_id()
+		self.name = name
+		self.type = type
+		self.title = title
 
 	def __repr__(self):
-		return '<Indicator(name={self.description!r})>'.format(self=self)
-
-
-class DatasetSchema(MdObjectSchema):
-	@post_load
-	def create_indicator(self, data, **kwargs):
-		return Dataset(**data)
+		return '<Dataset {},{},{}>'.format(self.id, self.name, self.ref)

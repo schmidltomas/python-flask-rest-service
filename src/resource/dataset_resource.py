@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_restful import Resource
 
-from src.repositories import DatasetRepository
+from src.repository import DatasetRepository
 
 
 class Dataset(Resource):

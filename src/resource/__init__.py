@@ -1,5 +1,5 @@
 # from .healthcheck import HealthCheck
-from .dataset import DatasetList, Dataset
+from .dataset_resource import DatasetList, Dataset
 
 
 __all__ = ['DatasetList', 'Dataset']
