@@ -1,5 +1,6 @@
 from . import db
 from .base_model import BaseModel
+from .enums import DatasetType, DatasetSubtype
 from src import utils
 from sqlalchemy.dialects.postgresql import JSON
 
@@ -7,11 +8,9 @@ from sqlalchemy.dialects.postgresql import JSON
 class DatasetDwhType(db.Model, BaseModel):
 	__tablename__ = 'dataset_dwh_type'
 
-	id = db.Column(db.String, primary_key=True)
-	# TODO should be db.Integer & enum
-	type = db.Column(db.String)
-	# TODO should be db.Integer & enum
-	subtype = db.Column(db.String)
+	id = db.Column(db.String(16), primary_key=True)
+	type = db.Column(db.Enum(*DatasetType.values(), name='dataset_type', create_type=False))
+	subtype = db.Column(db.Enum(*DatasetSubtype.values(), name='dataset_subtype', create_type=False))
 	table = db.Column(db.String)
 	primary_key = db.Column(db.String)
 	properties = db.Column(JSON)
@@ -19,9 +18,9 @@ class DatasetDwhType(db.Model, BaseModel):
 	dataset_id = db.Column(db.String(16), db.ForeignKey('dataset.id', ondelete='CASCADE'))
 	dataset = db.relationship('Dataset', back_populates='ref')
 
-	def __init__(self, type, subtype, table, primary_key, properties, dataset_id):
+	def __init__(self, dataset_type, subtype, table, primary_key, properties, dataset_id):
 		self.id = utils.generate_id()
-		self.type = type
+		self.type = dataset_type
 		self.subtype = subtype
 		self.table = table
 		self.primary_key = primary_key

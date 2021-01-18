@@ -10,9 +10,9 @@ class DatasetRepository:
 
 	# TODO use Dataset object as method param?
 	@staticmethod
-	def create(name: str, title: str, ref: dict) -> dict:
+	def create(name: str, object_type: str, title: str, ref: dict) -> dict:
 		try:
-			dataset = Dataset(name, "dataset", title)
+			dataset = Dataset(name, object_type, title)
 			dataset.save()
 
 			dataset_dwh_type = DatasetDwhType(
@@ -29,14 +29,12 @@ class DatasetRepository:
 	@staticmethod
 	def get(name: str) -> dict:
 		dataset = Dataset.find_by_name(name)
-		dataset = DatasetSchema().dump(dataset)
-		return dataset
+		return DatasetSchema().dump(dataset)
 
 	@staticmethod
 	def get_all() -> dict:
 		datasets = Dataset.find_all()
-		datasets = DatasetSchema().dump(datasets, many=True)
-		return datasets
+		return DatasetSchema().dump(datasets, many=True)
 
 	@staticmethod
 	def put(name: str) -> dict:

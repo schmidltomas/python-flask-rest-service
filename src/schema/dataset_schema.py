@@ -7,7 +7,7 @@ from .base_schema import BaseSchema
 class DatasetSchema(ma.SQLAlchemySchema, BaseSchema):
 	class Meta:
 		model = Dataset
-		fields = ('id', 'name', 'title', 'ref')
+		fields = ('id', 'name', 'type', 'title', 'ref')
 		ordered = True
 
 	ref = ma.Nested(DatasetDwhTypeSchema)
