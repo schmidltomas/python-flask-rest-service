@@ -12,8 +12,8 @@ class Dataset(Resource):
 
 	@staticmethod
 	def put(name: str):
-		DatasetRepository.put(name)
-		return '', 200
+		dataset = DatasetRepository.put(name)
+		return dataset, 200
 
 	@staticmethod
 	def delete(name: str):

@@ -3,11 +3,12 @@ from src.exceptions import ResourceExists
 from src.model import Dataset, DatasetDwhType
 from src.schema import DatasetSchema
 from flask import request
+import json
 
 
 class DatasetRepository:
 
-	# TODO also use request object?
+	# TODO use Dataset object as method param?
 	@staticmethod
 	def create(name: str, title: str, ref: dict) -> dict:
 		try:
@@ -19,32 +20,33 @@ class DatasetRepository:
 				ref.get('properties'), dataset.id)
 			dataset_dwh_type.save()
 
-			saved_dataset = Dataset.query.filter_by(name=dataset.name).first_or_404()
-			result = DatasetSchema().dump(saved_dataset)
+			created_dataset = Dataset.find_by_name(name)
+			return DatasetSchema().dump(created_dataset)
 		except IntegrityError:
 			Dataset.rollback()
 			raise ResourceExists('Dataset name=' + name + ' already exists.')
 
-		return result
-
 	@staticmethod
 	def get(name: str) -> dict:
-		dataset = Dataset.query.filter_by(name=name).first_or_404()
+		dataset = Dataset.find_by_name(name)
 		dataset = DatasetSchema().dump(dataset)
 		return dataset
 
 	@staticmethod
 	def get_all() -> dict:
-		datasets = Dataset.query.all()
+		datasets = Dataset.find_all()
 		datasets = DatasetSchema().dump(datasets, many=True)
 		return datasets
 
 	@staticmethod
 	def put(name: str) -> dict:
-		# TODO
-		return {}
+		request_dict = json.loads(request.data)
+		updated_dataset = Dataset.find_by_name(name)
+		updated_dataset.update(**request_dict)
+		updated_dataset.ref.update(**request_dict.get('ref'))
+		return DatasetSchema().dump(updated_dataset)
 
 	@staticmethod
 	def delete(name: str):
-		dataset = Dataset.query.filter_by(name=name).first_or_404()
+		dataset = Dataset.find_by_name(name)
 		dataset.delete()
