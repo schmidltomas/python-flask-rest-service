@@ -8,8 +8,8 @@ class BaseModel:
 		db.session.commit()
 		return self
 
-	def update(self, **kwargs):
-		for key, value in kwargs.items():
+	def update(self, schema):
+		for key, value in schema.items():
 			if hasattr(self, key) and not isinstance(value, dict):
 				setattr(self, key, value)
 
@@ -27,7 +27,6 @@ class BaseModel:
 
 	@classmethod
 	def find_by_name(cls, _name: str) -> "BaseModel":
-		# TODO use .first_or_404()? how does it translate to HTTP?
 		return cls.query.filter_by(name=_name).first()
 
 	@classmethod

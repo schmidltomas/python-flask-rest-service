@@ -1,6 +1,7 @@
 from flask import request, jsonify
 from flask_restful import Resource, reqparse
 from src.repository import DatasetRepository
+from src.schema import DatasetSchema
 from ..exceptions import ResourceException
 
 
@@ -15,8 +16,11 @@ class Dataset(Resource):
 
 	@staticmethod
 	def put(id: str):
+		request_json = request.get_json(silent=True)
+		schema = DatasetSchema().load(request_json)
+
 		try:
-			dataset = DatasetRepository.put(id)
+			dataset = DatasetRepository.put(id, schema)
 			return dataset, 200
 		except ResourceException as ex:
 			return ex.to_dict()
@@ -34,13 +38,10 @@ class DatasetList(Resource):
 	@staticmethod
 	def post():
 		request_json = request.get_json(silent=True)
-		name: str = request_json['name']
-		object_type: str = request_json['type']
-		title: str = request_json.get('title', '')
-		ref: dict = request_json.get('ref', '')
+		schema = DatasetSchema().load(request_json)
 
 		try:
-			dataset = DatasetRepository.create(name, object_type, title, ref)
+			dataset = DatasetRepository.create(schema)
 			return dataset, 200
 		except ResourceException as ex:
 			return ex.to_dict()

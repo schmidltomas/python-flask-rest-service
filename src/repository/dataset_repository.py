@@ -2,29 +2,27 @@ from sqlalchemy.exc import IntegrityError
 from src.exceptions import ResourceExists, ResourceNotFound
 from src.model import Dataset, DatasetDwhType
 from src.schema import DatasetSchema
-from flask import request
-import json
 
 
 class DatasetRepository:
 
-	# TODO use Dataset object as method param?
 	@staticmethod
-	def create(name: str, object_type: str, title: str, ref: dict) -> dict:
+	def create(schema: DatasetSchema) -> dict:
 		try:
-			dataset = Dataset(name, object_type, title)
+			dataset = Dataset(schema.get('name'), schema.get('type'), schema.get('title'))
 			dataset.save()
 
+			ref = schema.get('ref')
 			dataset_dwh_type = DatasetDwhType(
 				ref.get('type'), ref.get('subtype'), ref.get('table'), ref.get('primaryKey'),
 				ref.get('properties'), dataset.id)
 			dataset_dwh_type.save()
 
-			created_dataset = Dataset.find_by_name(name)
+			created_dataset = Dataset.find_by_name(schema.get('name'))
 			return DatasetSchema().dump(created_dataset)
 		except IntegrityError:
 			Dataset.rollback()
-			raise ResourceExists('Dataset name=' + name + ' already exists.')
+			raise ResourceExists('Dataset name=' + schema.get('name') + ' already exists.')
 
 	@staticmethod
 	def get_by_name(name: str) -> dict:
@@ -50,15 +48,14 @@ class DatasetRepository:
 		return DatasetSchema().dump(datasets, many=True)
 
 	@staticmethod
-	def put(id: str) -> dict:
+	def put(id: str, schema: DatasetSchema) -> dict:
 		updated_dataset = Dataset.find_by_id(id)
 
 		if updated_dataset is None:
 			raise ResourceNotFound('Dataset id=' + id + ' not found.')
 		else:
-			request_body = json.loads(request.data)
-			updated_dataset.update(**request_body)
-			updated_dataset.ref.update(**request_body.get('ref'))
+			updated_dataset.update(schema)
+			updated_dataset.ref.update(schema.get('ref'))
 			return DatasetSchema().dump(updated_dataset)
 
 	@staticmethod
