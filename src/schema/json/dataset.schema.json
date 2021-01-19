@@ -1,0 +1,140 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$id": "https://secure.clevermaps.io/schemas/md/dataset.schema.json",
+    "type": "object",
+    "properties": {
+        "id": {
+            "id": "id",
+            "type": "string",
+            "pattern": "^[a-z0-9]{16}$"
+        },
+        "name": {
+            "id": "name",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+        },
+        "type": {
+            "id": "type",
+            "type": "string",
+            "enum": [
+                "dashboard",
+                "dataPermission",
+                "dataset",
+                "export",
+                "indicator",
+                "indicatorDrill",
+                "marker",
+                "markerSelector",
+                "metric",
+                "projectSettings",
+                "share",
+                "view"
+            ]
+        },
+        "title": {
+            "id": "title",
+            "type": "string"
+        },
+        "description": {
+            "id": "description",
+            "type": "string"
+        },
+        "ref": {
+            "properties": {
+                "type": {
+                    "id": "type",
+                    "type": "string",
+                    "enum": [
+                        "dwh",
+                        "vt"
+                    ]
+                },
+                "subtype": {
+                    "id": "subtype",
+                    "type": "string",
+                    "enum": [
+                        "geometryPolygon",
+                        "geometryPoint",
+                        "geometryLine",
+                        "basic",
+                        "date"
+                    ]
+                },
+                "geometry": {
+                    "id": "geometry",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "table": {
+                    "id": "table",
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]*$",
+                    "minLength": 1
+                },
+                "primaryKey": {
+                    "id": "primaryKey",
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]*$",
+                    "minLength": 1
+                },
+                "categorizable": {
+                    "id": "categorizable",
+                    "type": "boolean",
+                    "default": true
+                },
+                "properties": {
+                    "id": "properties",
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "id": "name",
+                                "type": "string",
+                                "pattern": "^[a-z][a-z0-9_-]*$",
+                                "minLength": 1
+                            },
+                            "title": {
+                                "id": "title",
+                                "type": "string",
+                                "minLength": 1
+                            },
+                            "column": {
+                                "id": "column",
+                                "type": "string",
+                                "pattern": "^[a-z][a-z0-9_-]*$",
+                                "minLength": 1
+                            },
+                            "type": {
+                                "id": "type",
+                                "type": "string",
+                                "enum": [
+                                    "integer",
+                                    "bigint",
+                                    "decimal",
+                                    "string",
+                                    "boolean",
+                                    "date",
+                                    "latitude",
+                                    "longitude"
+                                ]
+                            },
+                            "filterable": {
+                                "id": "filterable",
+                                "type": "boolean",
+                                "default": true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "name",
+        "type",
+        "ref"
+    ]
+}

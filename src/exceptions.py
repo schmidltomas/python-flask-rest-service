@@ -23,3 +23,7 @@ class ResourceExists(ResourceException):
 
 class ResourceNotFound(ResourceException):
 	status_code = 404
+
+
+class InvalidResource(ResourceException):
+	status_code = 400

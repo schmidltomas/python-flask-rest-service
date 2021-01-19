@@ -20,6 +20,7 @@ pip install flask-restful
 pip install exrex
 pip install flask-marshmallow
 pip install marshmallow-sqlalchemy
+pip install jsonschema
 ```
 
 # DB migration

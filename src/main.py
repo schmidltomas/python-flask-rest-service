@@ -15,7 +15,6 @@ api.add_resource(DatasetList, '/datasets')
 
 
 # TODO:
-#  - input validation
 #  - pagination
 #  - tests
 #  - docstrings
