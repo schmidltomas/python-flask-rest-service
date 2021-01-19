@@ -1,24 +1,33 @@
 from flask import request, jsonify
-from flask_restful import Resource
-
+from flask_restful import Resource, reqparse
 from src.repository import DatasetRepository
+from ..exceptions import ResourceException
 
 
 class Dataset(Resource):
 	@staticmethod
-	def get(name: str):
-		dataset = DatasetRepository.get(name)
-		return dataset, 200
+	def get(id: str):
+		try:
+			dataset = DatasetRepository.get_by_id(id)
+			return dataset, 200
+		except ResourceException as ex:
+			return ex.to_dict()
 
 	@staticmethod
-	def put(name: str):
-		dataset = DatasetRepository.put(name)
-		return dataset, 200
+	def put(id: str):
+		try:
+			dataset = DatasetRepository.put(id)
+			return dataset, 200
+		except ResourceException as ex:
+			return ex.to_dict()
 
 	@staticmethod
-	def delete(name: str):
-		DatasetRepository.delete(name)
-		return '', 204
+	def delete(id: str):
+		try:
+			DatasetRepository.delete(id)
+			return '', 204
+		except ResourceException as ex:
+			return ex.to_dict()
 
 
 class DatasetList(Resource):
@@ -33,14 +42,21 @@ class DatasetList(Resource):
 		try:
 			dataset = DatasetRepository.create(name, object_type, title, ref)
 			return dataset, 200
-		except Exception as ex:
-			print(ex)
-			# response = jsonify(ex)
-			# response.status_code = ex.status_code
-			# return response
-			return None
+		except ResourceException as ex:
+			return ex.to_dict()
 
 	@staticmethod
 	def get():
-		datasets = DatasetRepository.get_all()
-		return datasets, 200
+		parser = reqparse.RequestParser()
+		parser.add_argument('name', type=str, required=False)
+		args = parser.parse_args()
+
+		try:
+			if args['name'] is not None:
+				dataset = DatasetRepository.get_by_name(args['name'])
+				return dataset, 200
+			else:
+				datasets = DatasetRepository.get_all()
+				return datasets, 200
+		except ResourceException as ex:
+			return ex.to_dict()

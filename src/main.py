@@ -10,13 +10,11 @@ app = create_app()
 migrate = Migrate(app, db)
 
 api = Api(app)
+api.add_resource(Dataset, '/datasets/<id>')
 api.add_resource(DatasetList, '/datasets')
-api.add_resource(Dataset, '/datasets/<name>')
 
 
 # TODO:
-#  - int database enums
-#  - exception handling
 #  - input validation
 #  - pagination
 #  - tests

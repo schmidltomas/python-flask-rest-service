@@ -22,7 +22,7 @@ class BaseModel:
 		return self
 
 	@classmethod
-	def find_by_id(cls, _id: int) -> "BaseModel":
+	def find_by_id(cls, _id: str) -> "BaseModel":
 		return cls.query.filter_by(id=_id).first()
 
 	@classmethod

@@ -1,5 +1,5 @@
 from sqlalchemy.exc import IntegrityError
-from src.exceptions import ResourceExists
+from src.exceptions import ResourceExists, ResourceNotFound
 from src.model import Dataset, DatasetDwhType
 from src.schema import DatasetSchema
 from flask import request
@@ -27,9 +27,22 @@ class DatasetRepository:
 			raise ResourceExists('Dataset name=' + name + ' already exists.')
 
 	@staticmethod
-	def get(name: str) -> dict:
+	def get_by_name(name: str) -> dict:
 		dataset = Dataset.find_by_name(name)
-		return DatasetSchema().dump(dataset)
+
+		if dataset is None:
+			raise ResourceNotFound('Dataset name=' + name + ' not found.')
+		else:
+			return DatasetSchema().dump(dataset)
+
+	@staticmethod
+	def get_by_id(id: str) -> dict:
+		dataset = Dataset.find_by_id(id)
+
+		if dataset is None:
+			raise ResourceNotFound('Dataset id=' + id + ' not found.')
+		else:
+			return DatasetSchema().dump(dataset)
 
 	@staticmethod
 	def get_all() -> dict:
@@ -37,14 +50,22 @@ class DatasetRepository:
 		return DatasetSchema().dump(datasets, many=True)
 
 	@staticmethod
-	def put(name: str) -> dict:
-		request_dict = json.loads(request.data)
-		updated_dataset = Dataset.find_by_name(name)
-		updated_dataset.update(**request_dict)
-		updated_dataset.ref.update(**request_dict.get('ref'))
-		return DatasetSchema().dump(updated_dataset)
+	def put(id: str) -> dict:
+		updated_dataset = Dataset.find_by_id(id)
+
+		if updated_dataset is None:
+			raise ResourceNotFound('Dataset id=' + id + ' not found.')
+		else:
+			request_body = json.loads(request.data)
+			updated_dataset.update(**request_body)
+			updated_dataset.ref.update(**request_body.get('ref'))
+			return DatasetSchema().dump(updated_dataset)
 
 	@staticmethod
-	def delete(name: str):
-		dataset = Dataset.find_by_name(name)
-		dataset.delete()
+	def delete(id: str):
+		dataset = Dataset.find_by_id(id)
+
+		if dataset is None:
+			raise ResourceNotFound('Dataset id=' + id + ' not found.')
+		else:
+			dataset.delete()

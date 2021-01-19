@@ -1,6 +1,7 @@
-class ResourceExists(Exception):
-	status_code = 409
+from datetime import datetime
 
+
+class ResourceException(Exception):
 	def __init__(self, message, status_code=None, payload=None):
 		Exception.__init__(self)
 		self.message = message
@@ -10,5 +11,15 @@ class ResourceExists(Exception):
 
 	def to_dict(self):
 		rv = dict(self.payload or ())
+		rv['status'] = self.status_code
 		rv['message'] = self.message
+		rv['timestamp'] = datetime.now().isoformat()
 		return rv
+
+
+class ResourceExists(ResourceException):
+	status_code = 409
+
+
+class ResourceNotFound(ResourceException):
+	status_code = 404
