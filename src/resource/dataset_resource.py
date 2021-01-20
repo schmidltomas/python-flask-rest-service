@@ -8,6 +8,12 @@ from src.schema import Validator
 validator = Validator('./src/schema/json/dataset.schema.json')
 
 
+def load_schema_from_request():
+	request_json = request.get_json(silent=True)
+	validator.validate(request_json)
+	return DatasetSchema().load(request_json)
+
+
 class Dataset(Resource):
 	@staticmethod
 	def get(id: str):
@@ -20,10 +26,7 @@ class Dataset(Resource):
 	@staticmethod
 	def put(id: str):
 		try:
-			# TODO to method
-			request_json = request.get_json(silent=True)
-			validator.validate(request_json)
-			schema = DatasetSchema().load(request_json)
+			schema = load_schema_from_request()
 			dataset = DatasetRepository.put(id, schema)
 			return dataset, 200
 		except ResourceException as ex:
@@ -42,10 +45,7 @@ class DatasetList(Resource):
 	@staticmethod
 	def post():
 		try:
-			# TODO to method
-			request_json = request.get_json(silent=True)
-			validator.validate(request_json)
-			schema = DatasetSchema().load(request_json)
+			schema = load_schema_from_request()
 			dataset = DatasetRepository.create(schema)
 			return dataset, 200
 		except ResourceException as ex:
