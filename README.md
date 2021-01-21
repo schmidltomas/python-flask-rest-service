@@ -12,15 +12,15 @@ source venv/bin/activate
 ```
 pip install flask
 pip install python-dotenv
-pip install marshmallow
+pip install psycopg2
 pip install flask-sqlalchemy
 pip install flask-migrate
-pip install psycopg2
-pip install flask-restful
-pip install exrex
 pip install flask-marshmallow
+pip install flask-restful
+pip install marshmallow
 pip install marshmallow-sqlalchemy
 pip install jsonschema
+pip install exrex
 ```
 
 # DB migration

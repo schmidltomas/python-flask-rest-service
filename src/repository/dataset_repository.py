@@ -2,6 +2,7 @@ from sqlalchemy.exc import IntegrityError
 from src.exceptions import ResourceExists, ResourceNotFound
 from src.model import Dataset, DatasetDwhType
 from src.schema import DatasetSchema
+from .page import Page
 
 
 class DatasetRepository:
@@ -43,9 +44,10 @@ class DatasetRepository:
 			return DatasetSchema().dump(dataset)
 
 	@staticmethod
-	def get_all() -> dict:
-		datasets = Dataset.find_all()
-		return DatasetSchema().dump(datasets, many=True)
+	def get_all(page: int, size: int) -> dict:
+		datasets_page = Dataset.find_page(page, size)
+		datasets = DatasetSchema().dump(datasets_page.items, many=True)
+		return Page(datasets_page, datasets).to_page()
 
 	@staticmethod
 	def put(id: str, schema: DatasetSchema) -> dict:

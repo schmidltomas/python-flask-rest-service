@@ -16,6 +16,6 @@ api.add_resource(DatasetList, '/datasets')
 
 
 # TODO:
-#  - pagination
+#  - ETags
 #  - tests
-#  - docstrings
+#  - docstrings/comments

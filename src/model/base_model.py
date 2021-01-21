@@ -1,5 +1,7 @@
 from . import db
 from typing import List
+from flask_sqlalchemy import Pagination
+from werkzeug.exceptions import NotFound
 
 
 class BaseModel:
@@ -32,6 +34,15 @@ class BaseModel:
 	@classmethod
 	def find_all(cls) -> List["BaseModel"]:
 		return cls.query.all()
+
+	@classmethod
+	def find_page(cls, page: int, size: int):
+		try:
+			return cls.query.paginate(page=page, per_page=size)
+		except NotFound:
+			# return empty page instead of exception with 404 by raised paginate()
+			query_all = cls.query.all()
+			return Pagination(query_all, page, size, len(query_all), list())
 
 	@staticmethod
 	def rollback():

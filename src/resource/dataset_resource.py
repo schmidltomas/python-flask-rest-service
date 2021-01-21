@@ -55,6 +55,8 @@ class DatasetList(Resource):
 	def get():
 		parser = reqparse.RequestParser()
 		parser.add_argument('name', type=str, required=False)
+		parser.add_argument('page', type=int, required=False, default=1)
+		parser.add_argument('size', type=int, required=False, default=5)
 		args = parser.parse_args()
 
 		try:
@@ -62,7 +64,7 @@ class DatasetList(Resource):
 				dataset = DatasetRepository.get_by_name(args['name'])
 				return dataset, 200
 			else:
-				datasets = DatasetRepository.get_all()
-				return datasets, 200
+				page = DatasetRepository.get_all(args['page'], args['size'])
+				return page, 200
 		except ResourceException as ex:
 			return ex.to_dict(), ex.status_code
