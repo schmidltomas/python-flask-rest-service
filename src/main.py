@@ -16,6 +16,6 @@ api.add_resource(DatasetList, '/datasets')
 
 
 # TODO:
-#  - ETags
-#  - tests
+#  - Dockerize
+#  - ETags?
 #  - docstrings/comments

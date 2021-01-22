@@ -15,8 +15,8 @@ class DatasetRepository:
 
 			ref = schema.get('ref')
 			dataset_dwh_type = DatasetDwhType(
-				ref.get('type'), ref.get('subtype'), ref.get('table'), ref.get('primaryKey'),
-				ref.get('properties'), dataset.id)
+				ref.get('type'), ref.get('subtype'), ref.get('table'), ref.get('primary_key'),
+				ref.get('categorizable'), ref.get('properties'), dataset.id)
 			dataset_dwh_type.save()
 
 			created_dataset = Dataset.find_by_name(schema.get('name'))

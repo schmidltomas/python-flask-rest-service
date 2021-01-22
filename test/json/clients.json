@@ -1,0 +1,35 @@
+{
+    "name": "clients",
+    "type": "dataset",
+    "title": "Clients",
+    "ref": {
+        "type": "dwh",
+        "subtype": "basic",
+        "primaryKey": "client_id",
+        "categorizable": true,
+        "properties": [
+            {
+                "filterable": false,
+                "name": "client_id",
+                "title": "Client ID",
+                "column": "client_id",
+                "type": "integer"
+            },
+            {
+                "filterable": false,
+                "name": "postcode",
+                "title": "postcode",
+                "column": "postcode",
+                "type": "string",
+                "foreignKey": "postcodes_dwh"
+            },
+            {
+                "filterable": false,
+                "name": "postcode_point",
+                "title": "postcode_point",
+                "column": "postcode_point",
+                "type": "string"
+            }
+        ]
+    }
+}

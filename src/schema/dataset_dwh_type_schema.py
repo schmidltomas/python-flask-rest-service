@@ -6,5 +6,5 @@ from .base_schema import BaseSchema
 class DatasetDwhTypeSchema(ma.SQLAlchemySchema, BaseSchema):
 	class Meta:
 		model = DatasetDwhType
-		fields = ('type', 'subtype', 'table', 'primary_key', 'properties')
+		fields = ('type', 'subtype', 'table', 'primary_key', 'categorizable', 'properties')
 		ordered = True
