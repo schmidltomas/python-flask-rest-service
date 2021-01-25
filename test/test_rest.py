@@ -30,7 +30,7 @@ class BasicTestCase(unittest.TestCase):
 		self.assertEqual(page_resp['links'][0]['rel'], 'self')
 		self.assertEqual(page_resp['links'][0]['href'], '/datasets?page=1&size=5')
 
-	def rest_test(self):
+	def test_rest(self):
 		test_client = app.test_client(self)
 		dataset = read_file('./test/json/clients.json')
 
@@ -39,12 +39,19 @@ class BasicTestCase(unittest.TestCase):
 		self.assertEqual(post_response.status_code, 200)
 		dataset_resp = json.loads(post_response.data)
 		dataset_id = dataset_resp.get('id')
+		dataset_name = dataset_resp.get('name')
 		self.assert_dataset(dataset_resp)
 
 		# GET /datasets/<id>
-		get_response = test_client.get('/datasets/' + dataset_id)
-		self.assertEqual(get_response.status_code, 200)
-		dataset_by_id_resp = json.loads(get_response.data)
+		get_by_id_response = test_client.get('/datasets/' + dataset_id)
+		self.assertEqual(get_by_id_response.status_code, 200)
+		dataset_by_id_resp = json.loads(get_by_id_response.data)
+		self.assert_dataset(dataset_by_id_resp)
+
+		# GET /datasets?name=<name>
+		get_by_name_response = test_client.get('/datasets?name=' + dataset_name)
+		self.assertEqual(get_by_name_response.status_code, 200)
+		dataset_by_id_resp = json.loads(get_by_name_response.data)
 		self.assert_dataset(dataset_by_id_resp)
 
 		# GET /datasets

@@ -8,7 +8,7 @@ docker-compose up
 ```
 
 # Run locally
-Setup virtual environment and install Python dependencies:
+Setup virtual environment and install Python requirements:
 ```
 python3 -m venv venv
 virtualenv venv
@@ -28,3 +28,24 @@ Run Flask app:
 ```
 flask run
 ```
+
+# REST API
+The service runs on `localhost:5000` and exposes a simple REST API:
+```
+POST /datasets
+GET /datasets/<id>
+GET /datasets?name=<name>
+GET /datasets
+PUT /datasets/<id>
+DELETE /datasets/<id>
+```
+
+An example of a dataset can be found in `/test/json/clients.json`
+
+# Tests
+Run unit test from the root folder:
+```
+python3 -m unittest test.test_rest
+```
+
+Note: it may be required to set env variables from `/.flaskenv` manually to run the test with separate `python` command.

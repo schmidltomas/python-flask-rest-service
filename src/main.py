@@ -1,6 +1,4 @@
-from flask import Flask, jsonify, request
 from flask_restful import Api
-from flask_migrate import Migrate
 from src.resource import Dataset, DatasetList, HealthCheck
 from src.model import db
 from flask_migrate import Migrate
@@ -16,6 +14,7 @@ api.add_resource(DatasetList, '/datasets')
 
 
 # TODO:
-#  - Dockerize
-#  - ETags?
+#  - improve health check with DB availability
+#  - ETags, object versioning
 #  - docstrings/comments
+#  - move JSON validation to decorator
