@@ -8,29 +8,15 @@ docker-compose up
 ```
 
 # Run locally
-Setup virtual environment:
+Setup virtual environment and install Python dependencies:
 ```
 python3 -m venv venv
 virtualenv venv
 source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Install dependencies:
-```
-pip install flask
-pip install python-dotenv
-pip install psycopg2
-pip install flask-sqlalchemy
-pip install flask-migrate
-pip install flask-marshmallow
-pip install flask-restful
-pip install marshmallow
-pip install marshmallow-sqlalchemy
-pip install jsonschema
-pip install exrex
-```
-
-Create the database:
+Create and migrate the database:
 ```
 psql -U postgres -c "CREATE DATABASE apgqi1djut1d5f9u_md;"
 flask db init
@@ -38,7 +24,7 @@ flask db migrate
 flask db upgrade
 ```
 
-And run Flask app:
+Run Flask app:
 ```
 flask run
 ```
